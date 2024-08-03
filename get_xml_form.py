@@ -38,6 +38,14 @@ def check_for_form_type(company_data: dict, form_type: str):
     return (forms.__contains__(form_type))
 
 def extract_xml_from_file(file_url: str):
+    """Récupère un formulaire .txt pointé par une URL et en extrait la partie XML pour un traitement ultérieur.
+
+    Args:
+        file_url (str): URL vers le formulaire .txt
+
+    Returns:
+        str: String XML du document / None si aucune balise XML n'est trouvée.
+    """
     xml_start = "<XML>"
     xml_end = "</XML>"
     xml_pattern = re.compile(re.escape(xml_start) + r'(.*?)' + re.escape(xml_end), re.DOTALL)
@@ -52,4 +60,6 @@ def extract_xml_from_file(file_url: str):
             return (None)
     else:
         print(f"GET ERROR @ EXTRACT_XML_FROM_FILES : {txt_rqst.status_code}")
+        
+
     # print(entire_file)
