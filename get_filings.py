@@ -45,7 +45,7 @@ def get_cik_from_lines(cik_lines: List[str]):
 #13F scraping
 def get_13f_fillings(cik):
     endpoint = f"https://data.sec.gov/submissions/CIK{cik}.json"
-    headers = {"User-Agent": "GXY"}
+    headers = constants.API_HEADER
     doc = requests.get(url=endpoint, headers=headers)
     if (doc.status_code == 200):
         return (doc.json())
@@ -91,8 +91,10 @@ def get_url_dict(ciks_db: str, to_retrieve: List[str], form_type: str, refresh_d
             
     return (url_dict)
 
-# test = get_url_dict(constants.CIK_FILE, constants.COMPANIES, "13F-HR", True)
-# print(test)
+
+
+test = get_url_dict(constants.CIK_FILE, constants.COMPANIES, "13F-HR", True)
+get_xml_form.extract_xml_from_file(test['VANGUARD'][0][0])
 # print(check_m_time(f'{constants.JSON_SAVE_DIR}/VANGUARD.json'))
 # ciks = get_cik_from_lines(lines)
 # get_json_list(ciks, "VANGUARD")
