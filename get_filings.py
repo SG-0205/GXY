@@ -1,10 +1,13 @@
+from ast import Constant
 import os
+import datetime
 from pickle import LIST
 from pprint import PrettyPrinter
 from tkinter.filedialog import SaveFileDialog
 from typing import List
+from urllib.parse import urldefrag
 
-from numpy import true_divide
+
 import constants
 import json
 import requests
@@ -13,8 +16,16 @@ import get_xml_form
 
 #Edgar Init
 client = EdgarClient("GXY")
-cik_list = open("./CIK_LIST_FULL.txt").readlines()
-tmp_dump = open("./tmp.json", "w")
+
+#Check last data update
+def check_m_time(filepath: str):
+    refresh_limit = datetime.timedelta(hours=constants.REFRESH_MIN_TIME_H)
+    last_mod_t = datetime.datetime.fromtimestamp(os.path.getmtime(filepath))
+    if (datetime.datetime.now() - last_mod_t < refresh_limit):
+        return (True)
+    else:
+        return (False)
+    
 
 #CIK filtering
 def get_lines_from_names(cik_list: List[str], name_list: List[str]): 
@@ -39,7 +50,7 @@ def get_13f_fillings(cik):
     if (doc.status_code == 200):
         return (doc.json())
     else:
-        print("GET ERROR IN SEC API")
+        print("API ERROR")
         return (0)
 
 def get_json_list(ciks: List[str], save_name: str):
@@ -50,7 +61,10 @@ def get_json_list(ciks: List[str], save_name: str):
             if (dump != 0):
                 save_str = json.dumps(dump)
                 save_file.write(save_str + '\n')
-    return (save_file.readlines())
+            else:
+                return (None)
+    save_file_r = open(f'{constants.JSON_SAVE_DIR}' + f'/{save_name}.json', "r")
+    return (save_file_r.readlines())
 
 def get_url_dict(ciks_db: str, to_retrieve: List[str], form_type: str, refresh_data: bool):
     if refresh_data == False:
@@ -59,17 +73,27 @@ def get_url_dict(ciks_db: str, to_retrieve: List[str], form_type: str, refresh_d
                 to_retrieve.remove(cpy_name)
     db_lines = open(ciks_db).readlines()
     retrieved_lines = get_lines_from_names(db_lines, to_retrieve)
+    print(retrieved_lines)
     url_dict = {name : [] for name in to_retrieve}
-    for name in to_retrieve:
-        company_ciks = get_cik_from_lines(company_lines)            #INDEX OUT OF RANGE
-        for company_lines in retrieved_lines[name]:
-            print(company_lines)
-            json_list = get_json_list(company_lines, name)
+    cik_dict = {name : [] for name in to_retrieve}
+    for name in url_dict.keys():
+        # print(name)
+        cik_dict[name] = get_cik_from_lines(retrieved_lines[name])
+        # print (url_dict)
+        if (os.path.exists(f'{constants.JSON_SAVE_DIR}/{name}.json') == False) or (check_m_time(f'{constants.JSON_SAVE_DIR}/{name}.json') == False):
+            json_list = get_json_list(cik_dict[name], name)
+        else:
+            json_list = open(f'{constants.JSON_SAVE_DIR}/{name}.json').readlines()
+        if (json_list != None):
             for line in json_list:
                 url_dict[name].append(get_xml_form.get_form_urls_from_data(json.loads(line), form_type))
+        url_dict[name] = list(filter(None, url_dict[name]))
+            
+    return (url_dict)
 
-test = get_url_dict("./CIK_LIST_FULL.txt", ['VANGUARD', 'BLACKROCK'], "13F-HR", True)
-print(test)
+# test = get_url_dict(constants.CIK_FILE, constants.COMPANIES, "13F-HR", True)
+# print(test)
+# print(check_m_time(f'{constants.JSON_SAVE_DIR}/VANGUARD.json'))
 # ciks = get_cik_from_lines(lines)
 # get_json_list(ciks, "VANGUARD")
 # json_list = open(f'{constants.JSON_SAVE_DIR}' + f'/VANGUARD.json', "r").readlines()
