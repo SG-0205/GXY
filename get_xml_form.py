@@ -44,7 +44,8 @@ def get_cpy_name_from_cik(cik: str, cik_list_path=constants.CIK_FILE):
     cik_lines = open(cik_list_path, "r").readlines()
     for line in cik_lines:
         if (line.__contains__(cik)):
-            return (line)
+            return (line.removesuffix('\n'))
+            
 
 def extract_cik_from_url(form_url: str):
     splitted_url = form_url.split('/')
@@ -80,19 +81,6 @@ def extract_xml_from_file(file_url: str) -> str:
     else:
         print(f"GET ERROR @ EXTRACT_XML_FROM_FILES : {txt_rqst.status_code}")
     return ("")
-
-def xml_save_cleaner(xml_save_path=constants.XML_SAVE_DIR):
-    try:
-        with os.scandir(xml_save_path) as it:
-            for entry in it:
-                print(entry)
-                if entry.is_file():
-                    if open(entry, "r").readlines().__contains__("ERROR"):
-                        os.remove(entry)
-                elif entry.is_dir():
-                    xml_save_cleaner(f'{constants.XML_SAVE_DIR}/{entry}/')                        
-    except FileNotFoundError:
-        return (0)
 
 
 def save_xml_docs(url_dict: dict):

@@ -175,6 +175,7 @@ visual_tree = tree_builder(test["BLACKROCK"])
 for pre, fill, node in RenderTree(visual_tree):
     print("%s%s" % (pre, node.name))
 get_xml_form.save_xml_docs(test)
+
 # get_xml_form.xml_save_cleaner()
 # get_xml_form.extract_cik_from_url(test["VANGUARD"][0][0])
 # test_xml = get_xml_form.extract_xml_from_file(test['VANGUARD'][0][0])

@@ -8,6 +8,7 @@ requests = "*"
 sec-edgar-api = "*"
 pandas = "*"
 anytree = "*"
+chardet = "*"
 
 [dev-packages]
 
