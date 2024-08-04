@@ -18,20 +18,15 @@ def get_form_urls_from_data(company_data: dict, form_type: str):
     filings = company_data.get('filings', {})
     recent = filings.get('recent', {})
     accession_number = recent.get('accessionNumber', [])
-    primary_document = recent.get('primaryDocument', [])
     forms = recent.get('form', [])
     print(forms)
     i = 0
     for form in forms:
         if form == form_type:
-            print(form)
-            print(i)
             url_accessionNb = format_accession_nb(accessionNumber=accession_number[i])
-            # prim_doc_url = primary_document[i]
             forms_url_list.append(f"{url_base}{company_data.get('cik')}/{url_accessionNb}/{accession_number[i]}.txt")
         i += 1
-        print(i)
-        print(form)
+
     return (forms_url_list)
 
 def check_for_form_type(company_data: dict, form_type: str):
@@ -73,14 +68,12 @@ def extract_xml_from_file(file_url: str, get_header=False) -> str:
     if (txt_rqst.status_code == 200):
         entire_file = txt_rqst.text
         xml_result = xml_pattern.findall(entire_file)
-        print(xml_result.__len__())
         if (xml_result):
             if (get_header == False):
                 return (str(xml_result[1]))
             else:
                 return (str(xml_result[0]))
         else:
-            print(f"NO XML IN FILE POINTED BY {file_url}")
             return ("ERROR")
     else:
         print(f"GET ERROR @ EXTRACT_XML_FROM_FILES : {txt_rqst.status_code}")
@@ -90,21 +83,26 @@ def extract_xml_from_file(file_url: str, get_header=False) -> str:
 def save_xml_docs(url_dict: dict):
     for cpny in url_dict.keys():
         for sub_cpny in url_dict[cpny]:
-            print(sub_cpny)
+            i = 0
             for form in sub_cpny:
+                i += 1
                 xml_doc = extract_xml_from_file(form, False)
                 xml_header = extract_xml_from_file(form, True)
                 if not (xml_doc.__contains__("ERROR")):
-                    print(form)
                     sub_cik = get_cpy_name_from_cik(extract_cik_from_url(form))
                     if not os.path.exists(f"{constants.XML_SAVE_DIR}/{cpny}/{sub_cik}"):
                         os.makedirs(f"{constants.XML_SAVE_DIR}/{cpny}/{sub_cik}")
                     xml_save = open(f"{constants.XML_SAVE_DIR}/{cpny}/{sub_cik}/{extract_form_nb_from_url(form)}.xml", "w")
                     xml_save.write(xml_doc)
+                    print(f"[{sub_cik}] XML CONTENT OK ({i}/{sub_cpny.__len__()})")
+                else:
+                    print(f"[{sub_cik}] NO XML CONTENT ({i}/{sub_cpny.__len__()})")
                 if not (xml_header.__contains__("ERROR")):
-                    print(form)
                     sub_cik = get_cpy_name_from_cik(extract_cik_from_url(form))
                     if not os.path.exists(f"{constants.XML_SAVE_DIR}/{cpny}/{sub_cik}"):
                         os.makedirs(f"{constants.XML_SAVE_DIR}/{cpny}/{sub_cik}")
                     xml_save = open(f"{constants.XML_SAVE_DIR}/{cpny}/{sub_cik}/{extract_form_nb_from_url(form)}-header.xml", "w")
                     xml_save.write(xml_header)
+                    print(f"[{sub_cik}] XML HEADER OK ({i}/{sub_cpny.__len__()})")
+                else:
+                    print(f"[{sub_cik}] NO XML HEADER ({i}/{sub_cpny.__len__()})")
