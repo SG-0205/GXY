@@ -6,7 +6,7 @@ from pprint import PrettyPrinter
 from tkinter.filedialog import SaveFileDialog
 from typing import List
 from urllib.parse import urldefrag
-
+from anytree import Node, RenderTree
 
 import constants
 import json
@@ -16,6 +16,19 @@ import get_xml_form
 
 #Edgar Init
 client = EdgarClient("GXY")
+
+def tree_builder(elems: List, parent=None):
+    if (parent == None):
+        parent = Node('root')
+    for item in elems:
+        if isinstance(item, list):
+            child = Node('list', parent=parent)
+            tree_builder(item, parent=child)
+        else:
+            Node(item, parent=parent)
+        
+    return (parent)
+            
 
 def check_m_time(filepath: str):
     """Compare la dernière modification d'un fichier d'entreprise avec la durée REFRESH_MIN_H.
@@ -46,11 +59,14 @@ def get_lines_from_names(cik_list: List[str], name_list: List[str]):
         Dict{str: List[str]}: Dictionnaire avec comme clefs les noms des entreprises recherchées et comme valeurs les lignes extraites.
     """
     return_list = {name : [] for name in name_list}
+
     for name in name_list:
         for line in cik_list:
             if line.__contains__(name) == True:
                 return_list[name].append(line)
+
     return (return_list)    
+
 
 def get_cik_from_lines(cik_lines: List[str]):
     """Isole l'identifiant CIK de chaque ligne d'entreprise contenues dans la liste.
@@ -62,9 +78,12 @@ def get_cik_from_lines(cik_lines: List[str]):
         List[str]: Liste d'identifiants CIK.
     """
     return_list = []
+
     for line in cik_lines:
         return_list.append(line.split(sep=':')[1])
+
     return (return_list)
+
 
 def get_13f_fillings(cik: str):
     """Tente de récupérer les détails d'une entreprise à partir de son CIK et les renvoie formaté en JSON.
@@ -78,11 +97,14 @@ def get_13f_fillings(cik: str):
     endpoint = f"https://data.sec.gov/submissions/CIK{cik}.json"
     headers = constants.API_HEADER
     doc = requests.get(url=endpoint, headers=headers)
+
     if (doc.status_code == 200):
         return (doc.json())
     else:
         print("API ERROR")
+
         return (0)
+
 
 def get_json_list(ciks: List[str], save_name: str):
     """Enregistre les documents liés aux CIKs de l'entreprise passés en paramètre dans un fichier qui prend le nom de l'entreprise.
@@ -95,6 +117,7 @@ def get_json_list(ciks: List[str], save_name: str):
         List[str]: Détails des CIKs au format JSON (Contenu du fichier créé).
     """
     save_file = open(f'{constants.JSON_SAVE_DIR}' + f'/{save_name}.json', "w")
+
     if save_file.writable() == True:
         for cik in ciks:
             dump = get_13f_fillings(cik)
@@ -104,7 +127,9 @@ def get_json_list(ciks: List[str], save_name: str):
             else:
                 return (None)
     save_file_r = open(f'{constants.JSON_SAVE_DIR}' + f'/{save_name}.json', "r")
+
     return (save_file_r.readlines())
+
 
 def get_url_dict(ciks_db: str, to_retrieve: List[str], form_type: str, refresh_data: bool):
     """Crée un dictionnaire avec en clefs les noms des entreprises à analyser et en valeurs les url vers les documents de type [form_type].
@@ -124,13 +149,11 @@ def get_url_dict(ciks_db: str, to_retrieve: List[str], form_type: str, refresh_d
                 to_retrieve.remove(cpy_name)
     db_lines = open(ciks_db).readlines()
     retrieved_lines = get_lines_from_names(db_lines, to_retrieve)
-    print(retrieved_lines)
     url_dict = {name : [] for name in to_retrieve}
     cik_dict = {name : [] for name in to_retrieve}
+
     for name in url_dict.keys():
-        # print(name)
         cik_dict[name] = get_cik_from_lines(retrieved_lines[name])
-        # print (url_dict)
         if (os.path.exists(f'{constants.JSON_SAVE_DIR}/{name}.json') == False) or (check_m_time(f'{constants.JSON_SAVE_DIR}/{name}.json') == False):
             json_list = get_json_list(cik_dict[name], name)
         else:
@@ -145,10 +168,19 @@ def get_url_dict(ciks_db: str, to_retrieve: List[str], form_type: str, refresh_d
 
 
 test = get_url_dict(constants.CIK_FILE, constants.COMPANIES, "13F-HR", True)
-test_xml = get_xml_form.extract_xml_from_file(test['VANGUARD'][0][0])
-t_file = open("./xml_forms/test.xml", "w")
-t_file.write(get_xml_form.extract_xml_from_file(test['VANGUARD'][0][0]))
-print(test_xml)
+visual_tree = tree_builder(test["VANGUARD"])
+for pre, fill, node in RenderTree(visual_tree):
+    print("%s%s" % (pre, node.name))
+visual_tree = tree_builder(test["BLACKROCK"])
+for pre, fill, node in RenderTree(visual_tree):
+    print("%s%s" % (pre, node.name))
+get_xml_form.save_xml_docs(test)
+# get_xml_form.xml_save_cleaner()
+# get_xml_form.extract_cik_from_url(test["VANGUARD"][0][0])
+# test_xml = get_xml_form.extract_xml_from_file(test['VANGUARD'][0][0])
+# t_file = open("./xml_forms/testV.xml", "w")
+# t_file.write(get_xml_form.extract_xml_from_file(test['VANGUARD'][0][0]))
+# print(test_xml)
 # print(check_m_time(f'{constants.JSON_SAVE_DIR}/VANGUARD.json'))
 # ciks = get_cik_from_lines(lines)
 # get_json_list(ciks, "VANGUARD")

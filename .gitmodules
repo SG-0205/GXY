@@ -1,0 +1,3 @@
+[submodule "cik-mapping"]
+	path = cik-mapping
+	url = https://github.com/janlukasschroeder/cik-mapping

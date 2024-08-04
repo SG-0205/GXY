@@ -7,6 +7,7 @@ name = "pypi"
 requests = "*"
 sec-edgar-api = "*"
 pandas = "*"
+anytree = "*"
 
 [dev-packages]
 
