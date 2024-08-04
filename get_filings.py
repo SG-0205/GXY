@@ -145,7 +145,10 @@ def get_url_dict(ciks_db: str, to_retrieve: List[str], form_type: str, refresh_d
 
 
 test = get_url_dict(constants.CIK_FILE, constants.COMPANIES, "13F-HR", True)
-get_xml_form.extract_xml_from_file(test['VANGUARD'][0][0])
+test_xml = get_xml_form.extract_xml_from_file(test['VANGUARD'][0][0])
+t_file = open("./xml_forms/test.xml", "w")
+t_file.write(get_xml_form.extract_xml_from_file(test['VANGUARD'][0][0]))
+print(test_xml)
 # print(check_m_time(f'{constants.JSON_SAVE_DIR}/VANGUARD.json'))
 # ciks = get_cik_from_lines(lines)
 # get_json_list(ciks, "VANGUARD")

@@ -37,7 +37,7 @@ def check_for_form_type(company_data: dict, form_type: str):
     forms = recent.get('form', [])
     return (forms.__contains__(form_type))
 
-def extract_xml_from_file(file_url: str):
+def extract_xml_from_file(file_url: str) -> str:
     """Récupère un formulaire .txt pointé par une URL et en extrait la partie XML pour un traitement ultérieur.
 
     Args:
@@ -50,16 +50,19 @@ def extract_xml_from_file(file_url: str):
     xml_end = "</XML>"
     xml_pattern = re.compile(re.escape(xml_start) + r'(.*?)' + re.escape(xml_end), re.DOTALL)
     txt_rqst = requests.get(file_url, headers=constants.API_HEADER)
+
     if (txt_rqst.status_code == 200):
         entire_file = txt_rqst.text
         xml_result = xml_pattern.findall(entire_file)
+
         if (xml_result):
-            return (''.join([xml_start + xml_content + xml_end for xml_content in xml_result]))
+            return (str(''.join([xml_start + xml_content + xml_end for xml_content in xml_result])))
         else:
             print(f"NO XML IN FILE POINTED BY {file_url}")
-            return (None)
+            return ("ERROR")
     else:
         print(f"GET ERROR @ EXTRACT_XML_FROM_FILES : {txt_rqst.status_code}")
+    return ("")
         
 
     # print(entire_file)
