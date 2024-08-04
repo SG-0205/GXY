@@ -178,7 +178,7 @@ get_xml_form.save_xml_docs(test)
 
 # get_xml_form.xml_save_cleaner()
 # get_xml_form.extract_cik_from_url(test["VANGUARD"][0][0])
-# test_xml = get_xml_form.extract_xml_from_file(test['VANGUARD'][0][0])
+test_xml = get_xml_form.extract_xml_from_file(test['VANGUARD'][0][0])
 # t_file = open("./xml_forms/testV.xml", "w")
 # t_file.write(get_xml_form.extract_xml_from_file(test['VANGUARD'][0][0]))
 # print(test_xml)

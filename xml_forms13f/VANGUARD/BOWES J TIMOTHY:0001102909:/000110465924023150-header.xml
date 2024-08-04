@@ -1,0 +1,115 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<edgarSubmission xsi:schemaLocation="http://www.sec.gov/edgar/thirteenffiler eis_13F_Filer.xsd" xmlns="http://www.sec.gov/edgar/thirteenffiler" xmlns:ns1="http://www.sec.gov/edgar/common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <schemaVersion>X0202</schemaVersion>
+  <headerData>
+    <submissionType>13F-HR</submissionType>
+    <filerInfo>
+      <liveTestFlag>LIVE</liveTestFlag>
+      <flags>
+        <confirmingCopyFlag>false</confirmingCopyFlag>
+        <returnCopyFlag>false</returnCopyFlag>
+        <overrideInternetFlag>false</overrideInternetFlag>
+      </flags>
+      <filer>
+        <credentials>
+          <cik>0000102909</cik>
+          <ccc>XXXXXXXX</ccc>
+        </credentials>
+      </filer>
+      <periodOfReport>12-31-2023</periodOfReport>
+    </filerInfo>
+  </headerData>
+  <formData>
+    <coverPage>
+      <reportCalendarOrQuarter>12-31-2023</reportCalendarOrQuarter>
+      <isAmendment>false</isAmendment>
+      <filingManager>
+        <name>VANGUARD GROUP INC</name>
+        <address>
+          <ns1:street1>Po Box 2600</ns1:street1>
+          <ns1:street2>V26</ns1:street2>
+          <ns1:city>Valley Forge</ns1:city>
+          <ns1:stateOrCountry>PA</ns1:stateOrCountry>
+          <ns1:zipCode>19482-2600</ns1:zipCode>
+        </address>
+      </filingManager>
+      <reportType>13F COMBINATION REPORT</reportType>
+      <form13FFileNumber>028-06408</form13FFileNumber>
+      <crdNumber>000105958</crdNumber>
+      <secFileNumber>801-11953</secFileNumber>
+      <otherManagersInfo>
+        <otherManager>
+          <cik>0001767306</cik>
+          <form13FFileNumber>028-20247</form13FFileNumber>
+          <crdNumber>000285366</crdNumber>
+          <secFileNumber>801-114487</secFileNumber>
+          <name>Vanguard Personalized Indexing Management, LLC</name>
+        </otherManager>
+      </otherManagersInfo>
+      <provideInfoForInstruction5>N</provideInfoForInstruction5>
+    </coverPage>
+    <signatureBlock>
+      <name>Ashley Grim</name>
+      <title>Head of Global Fund Administration</title>
+      <phone>610-669-8989</phone>
+      <signature>/s/ Ashley Grim</signature>
+      <city>Malvern</city>
+      <stateOrCountry>PA</stateOrCountry>
+      <signatureDate>02-14-2024</signatureDate>
+    </signatureBlock>
+    <summaryPage>
+      <otherIncludedManagersCount>5</otherIncludedManagersCount>
+      <tableEntryTotal>15952</tableEntryTotal>
+      <tableValueTotal>4569610310498</tableValueTotal>
+      <otherManagers2Info>
+        <otherManager2>
+          <sequenceNumber>1</sequenceNumber>
+          <otherManager>
+            <cik>0000933478</cik>
+            <form13FFileNumber>028-11554</form13FFileNumber>
+            <name>VANGUARD FIDUCIARY TRUST CO</name>
+          </otherManager>
+        </otherManager2>
+        <otherManager2>
+          <sequenceNumber>2</sequenceNumber>
+          <otherManager>
+            <cik>0001550100</cik>
+            <form13FFileNumber>028-14986</form13FFileNumber>
+            <crdNumber>000282933</crdNumber>
+            <secFileNumber>801-107761</secFileNumber>
+            <name>Vanguard Investments Australia, Ltd.</name>
+          </otherManager>
+        </otherManager2>
+        <otherManager2>
+          <sequenceNumber>3</sequenceNumber>
+          <otherManager>
+            <cik>0000947529</cik>
+            <form13FFileNumber>028-16887</form13FFileNumber>
+            <crdNumber>000106715</crdNumber>
+            <secFileNumber>801-49601</secFileNumber>
+            <name>VANGUARD ADVISERS INC</name>
+          </otherManager>
+        </otherManager2>
+        <otherManager2>
+          <sequenceNumber>4</sequenceNumber>
+          <otherManager>
+            <cik>0001811242</cik>
+            <form13FFileNumber>028-20273</form13FFileNumber>
+            <crdNumber>000164593</crdNumber>
+            <secFileNumber>801-76825</secFileNumber>
+            <name>Vanguard Global Advisers, LLC</name>
+          </otherManager>
+        </otherManager2>
+        <otherManager2>
+          <sequenceNumber>5</sequenceNumber>
+          <otherManager>
+            <cik>0001984256</cik>
+            <form13FFileNumber>028-23299</form13FFileNumber>
+            <name>Vanguard National Trust Co</name>
+          </otherManager>
+        </otherManager2>
+      </otherManagers2Info>
+    </summaryPage>
+  </formData>
+</edgarSubmission>

@@ -55,11 +55,12 @@ def extract_form_nb_from_url(form_url: str):
     splitted_url = form_url.split('/')
     return (splitted_url[7])
 
-def extract_xml_from_file(file_url: str) -> str:
+def extract_xml_from_file(file_url: str, get_header=False) -> str:
     """Récupère un formulaire .txt pointé par une URL et en extrait la partie XML pour un traitement ultérieur.
 
     Args:
-        file_url (str): URL vers le formulaire .txt
+        file_url (str): URL vers le formulaire .txt.
+        get_header (str): Si True, renvoie l'en-tête du document.
 
     Returns:
         str: String XML du document / None si aucune balise XML n'est trouvée.
@@ -74,7 +75,10 @@ def extract_xml_from_file(file_url: str) -> str:
         xml_result = xml_pattern.findall(entire_file)
         print(xml_result.__len__())
         if (xml_result):
-            return (str(''.join([xml_content for xml_content in xml_result])))
+            if (get_header == False):
+                return (str(xml_result[1]))
+            else:
+                return (str(xml_result[0]))
         else:
             print(f"NO XML IN FILE POINTED BY {file_url}")
             return ("ERROR")
@@ -88,11 +92,19 @@ def save_xml_docs(url_dict: dict):
         for sub_cpny in url_dict[cpny]:
             print(sub_cpny)
             for form in sub_cpny:
-                xml_try = extract_xml_from_file(form)
-                if not (xml_try.__contains__("ERROR")):
+                xml_doc = extract_xml_from_file(form, False)
+                xml_header = extract_xml_from_file(form, True)
+                if not (xml_doc.__contains__("ERROR")):
                     print(form)
                     sub_cik = get_cpy_name_from_cik(extract_cik_from_url(form))
                     if not os.path.exists(f"{constants.XML_SAVE_DIR}/{cpny}/{sub_cik}"):
                         os.makedirs(f"{constants.XML_SAVE_DIR}/{cpny}/{sub_cik}")
                     xml_save = open(f"{constants.XML_SAVE_DIR}/{cpny}/{sub_cik}/{extract_form_nb_from_url(form)}.xml", "w")
-                    xml_save.write(xml_try)
+                    xml_save.write(xml_doc)
+                if not (xml_header.__contains__("ERROR")):
+                    print(form)
+                    sub_cik = get_cpy_name_from_cik(extract_cik_from_url(form))
+                    if not os.path.exists(f"{constants.XML_SAVE_DIR}/{cpny}/{sub_cik}"):
+                        os.makedirs(f"{constants.XML_SAVE_DIR}/{cpny}/{sub_cik}")
+                    xml_save = open(f"{constants.XML_SAVE_DIR}/{cpny}/{sub_cik}/{extract_form_nb_from_url(form)}-header.xml", "w")
+                    xml_save.write(xml_header)

@@ -1,0 +1,56 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<edgarSubmission xmlns:ns1="http://www.sec.gov/edgar/common" xmlns="http://www.sec.gov/edgar/thirteenffiler">
+  <schemaVersion>X0202</schemaVersion>
+  <headerData>
+    <submissionType>13F-HR</submissionType>
+    <filerInfo>
+      <liveTestFlag>LIVE</liveTestFlag>
+      <flags>
+        <confirmingCopyFlag>false</confirmingCopyFlag>
+        <returnCopyFlag>false</returnCopyFlag>
+        <overrideInternetFlag>false</overrideInternetFlag>
+      </flags>
+      <filer>
+        <credentials>
+          <cik>0001730578</cik>
+          <ccc>XXXXXXXX</ccc>
+        </credentials>
+      </filer>
+      <periodOfReport>03-31-2023</periodOfReport>
+    </filerInfo>
+  </headerData>
+  <formData>
+    <coverPage>
+      <reportCalendarOrQuarter>03-31-2023</reportCalendarOrQuarter>
+      <isAmendment>false</isAmendment>
+      <filingManager>
+        <name>Vanguard Capital Wealth Advisors</name>
+        <address>
+          <ns1:street1>1600 BROADWAY SUITE 1600</ns1:street1>
+          <ns1:city>DENVER</ns1:city>
+          <ns1:stateOrCountry>CO</ns1:stateOrCountry>
+          <ns1:zipCode>80202</ns1:zipCode>
+        </address>
+      </filingManager>
+      <reportType>13F HOLDINGS REPORT</reportType>
+      <form13FFileNumber>028-18625</form13FFileNumber>
+      <provideInfoForInstruction5>N</provideInfoForInstruction5>
+    </coverPage>
+    <signatureBlock>
+      <name>Vincent Polivka</name>
+      <title>Managing Partner/CCO</title>
+      <phone>844-861-7504</phone>
+      <signature>/s/Vincent Polivka</signature>
+      <city>Denver</city>
+      <stateOrCountry>CO</stateOrCountry>
+      <signatureDate>04-20-2023</signatureDate>
+    </signatureBlock>
+    <summaryPage>
+      <otherIncludedManagersCount>0</otherIncludedManagersCount>
+      <tableEntryTotal>123</tableEntryTotal>
+      <tableValueTotal>100378069</tableValueTotal>
+      <isConfidentialOmitted>true</isConfidentialOmitted>
+    </summaryPage>
+  </formData>
+</edgarSubmission>
