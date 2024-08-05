@@ -12,9 +12,10 @@ XML_SAVE_DIR_D = "./xml_forms_13d"
 XML_SAVE_DIR_4 = "./xml_forms_4"
 XML_SAVE_DIR_5 = "./xml_forms_5"
 CIK_FILE = "./CIK_LIST_FULL.txt"
+TICKERS_FILE = "./FTD_LIST_UNIQUE"
 
 REFRESH_MIN_TIME_H = 72
-COMPANIES = ['VANGUARD', 'BLACKROCK']
+COMPANIES = ['VANGUARD', 'BLACKROCK', 'MAN GROUP']
 API_HEADER = {'User-Agent' : 'GXY - Goldenberg WM - samgold0205@gmail.com'}
 
 class ReportInfo(BaseModel):
@@ -33,6 +34,18 @@ class HoldingRef(BaseModel):
 
 class ReportData:
     def __init__(self, report_date: datetime.date, form_id: str, form_content_path: str, cik: str, group_name="UNLINKED"):
+        """Crée un objet ReportData associé à un formulaire pour l'enregistrement et le traitement des parts détenues par l'auteur du document.
+
+        Args:
+            report_date (datetime.date): date de remplissage du formulaire
+            form_id (str): id unique du formulaire (recommandation: nom du fichier sans l'extension)
+            form_content_path (str): chemin vers le fichier de contenu, l'en-tête est cherchée dans le même dossier 
+            cik (str): CIK de l'auteur du rapport
+            group_name (str, optional): groupe d'entreprise auquel appartient le rapport, "UNLINKED" par défaut
+
+        Returns:
+            Pydantic ValidationError | None : Ne renvoie rien si la validation par la classe ReportInfo est OK.  
+        """
         try:
             info = ReportInfo(
                 report_date=report_date,
@@ -43,6 +56,7 @@ class ReportData:
                 cik=int(cik))
         except ValidationError as ve:
             print(ve)
+            return (ve)
         
         self.report_date = info.report_date
         self.form_id = info.form_id
@@ -51,6 +65,17 @@ class ReportData:
         self.holdings = {}
 
     def add_holding(self, cusip: str, ticker: str, shares_nb: str, holding_value: str):
+        """Ajoute une entrée au dictionnaire des parts détenues rapportées dans le formulaire.
+
+        Args:
+            cusip (str): CUSIP de l'action
+            ticker (str): Ticker de l'action
+            shares_nb (str): Nombre de parts tenues
+            holding_value (str): Valeur totale des parts
+
+        Returns:
+            Pydantic ValidationError | None : Ne renvoie rien si la validation par la classe HoldingRef est OK. 
+        """
         try:
             holding = HoldingRef(
                 cusip=cusip,
@@ -60,5 +85,6 @@ class ReportData:
             )
         except ValidationError as ve:
             print(ve)
+            return (ve)
 
         self.holdings[f'{holding.cusip}:{holding.ticker}'] = (holding.shares_nb, holding.holding_value)

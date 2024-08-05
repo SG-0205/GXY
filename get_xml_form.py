@@ -5,6 +5,7 @@ import xml
 import constants
 import re
 import os
+import time
 
 def format_accession_nb(accessionNumber: str):
     return_str = str
@@ -77,7 +78,7 @@ def extract_xml_from_file(file_url: str, get_header=False) -> str:
             return ("ERROR")
     else:
         print(f"GET ERROR @ EXTRACT_XML_FROM_FILES : {txt_rqst.status_code}")
-    return ("")
+    return (f"{txt_rqst.status_code}")
 
 
 def save_xml_docs(url_dict: dict):
@@ -87,7 +88,9 @@ def save_xml_docs(url_dict: dict):
             for form in sub_cpny:
                 i += 1
                 xml_doc = extract_xml_from_file(form, False)
+                time.sleep(0.05)
                 xml_header = extract_xml_from_file(form, True)
+                time.sleep(0.05)
                 if not (xml_doc.__contains__("ERROR")):
                     sub_cik = get_cpy_name_from_cik(extract_cik_from_url(form))
                     if not os.path.exists(f"{constants.XML_SAVE_DIR}/{cpny}/{sub_cik}"):
