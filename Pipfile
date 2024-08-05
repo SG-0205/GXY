@@ -9,6 +9,7 @@ sec-edgar-api = "*"
 pandas = "*"
 anytree = "*"
 chardet = "*"
+pydantic = "*"
 
 [dev-packages]
 
